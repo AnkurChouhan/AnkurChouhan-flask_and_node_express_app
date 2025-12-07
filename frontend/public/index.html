@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Flask + Node Frontend</title>
+</head>
+<body>
+  <h1>Names from Flask API</h1>
+  <ul id="names-list"></ul>
+
+  <script>
+    async function loadNames() {
+      try {
+        const res = await fetch('/names');
+        const data = await res.json();
+        const list = document.getElementById('names-list');
+        list.innerHTML = '';
+
+        if (!data.data || !data.data.length) {
+          list.innerHTML = '<li>No names found.</li>';
+          return;
+        }
+
+        data.data.forEach(name => {
+          const li = document.createElement('li');
+          li.textContent = name;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        console.error('Error fetching names:', err);
+      }
+    }
+
+    loadNames();
+  </script>
+</body>
+</html>
